@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/strongloop/sl-ci-install/issues"
   },
-  "homepage": "https://github.com/strongloop/sl-ci-install"
+  "homepage": "https://github.com/strongloop/sl-ci-install",
+  "devDependencies": {
+    "mocha": "~1.14.0"
+  },
+  "dependencies": {
+    "tar": "~0.1.18"
+  }
 }
