@@ -7,7 +7,7 @@
     "sl-ci-install": "bin/sl-ci-install.js"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha -R spec"
   },
   "repository": {
     "type": "git",
