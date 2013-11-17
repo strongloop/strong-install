@@ -18,11 +18,13 @@ var branches = _.rest(process.argv, 3)
 
 var urls = _.map(branches, _.curry(pkgUrl)(repo, pkg))
 
-if (!pkg || urls.length < 1) {
-  done("node index.js <pkg_name> <branch> [branch..]")
-} else {
-  console.log(urls)
-  install(urls, pkg)
+if (require.main === module) {
+  if (!pkg || urls.length < 1) {
+    done("node index.js <pkg_name> <branch> [branch..]")
+  } else {
+    console.log(urls)
+    install(urls, pkg)
+  }
 }
 
 function install(urls, name) {
