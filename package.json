@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "Alternate installer for npm packages",
   "main": "index.js",
+  "bin": {
+    "sl-ci-install": "bin/sl-ci-install.js"
+  },
   "scripts": {
     "test": "mocha"
   },
