@@ -3,6 +3,7 @@
 var Installer = require('../').Installer
   , program   = require('commander')
   , path      = require('path')
+  , util      = require('util')
   , _         = require('lodash')
 
 var defaultRepo = process.env.ALT_REPO
@@ -33,6 +34,8 @@ if (cmd.args.length < 1) {
 
 pkg = new Installer( path.join('node_modules', pkgName) )
 
+pkg.on('entry', function() { util.print('.') })
+
 install(branches)
 
 function install (branches) {
@@ -46,7 +49,7 @@ function install (branches) {
         console.log('Failed to install ' + pkgName + ' from branch ' + branch)
         setImmediate(_.partial(install, branches))
       } else {
-        console.log(pkgName + " was installed to " + pkg.destination)
+        console.log('\nInstalled ' + pkgName + '@' + branch + ' to ' + pkg.destination)
       }
     })
   }
