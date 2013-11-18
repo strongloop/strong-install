@@ -81,4 +81,8 @@ describe('Installer', function() {
       })
     })
   })
+
+  describe('entry event', function() {
+    it('emits an event for each file extracted')
+  })
 })
