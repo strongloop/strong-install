@@ -26,5 +26,10 @@
     "tar": "~0.1.18",
     "lodash": "~2.3.0",
     "commander": "~2.0.0"
-  }
+  },
+  "bundledDependencies": [
+    "tar",
+    "lodash",
+    "commander"
+  ]
 }
