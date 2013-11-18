@@ -1,4 +1,5 @@
 var assert = require('assert')
+  , http   = require('http')
 
 var Installer = require('../lib/installer')
 
@@ -27,10 +28,19 @@ describe('Installer', function() {
       })
     })
     it('fails if the package does not exist', function (done) {
-      installer.install('http://google.com/some_404', function(err) {
-        assert(err instanceof Error)
-        done()
+      var server = http.createServer()
+      .on('request', function (req, res) {
+        res.statusCode = 404
+        res.end('Not Found')
       })
+      .on('listening', function() {
+        var url404 = 'http://localhost:' + server.address().port + '/something'
+        installer.install(url404, function(err) {
+          assert(err instanceof Error)
+          server.close(done)
+        })
+      })
+      .listen(0)
     })
   })
 })
