@@ -41,13 +41,14 @@ install(branches)
 function install (branches) {
   var branch = branches.shift()
   if (!branch) {
-    console.log("Failed to install " + pkgName)
+    console.log('Failed to install ' + pkgName)
     process.exit(1)
   } else {
+    console.log('Installing ' + pkgName + '@' + branch)
     pkg.install(pkgUrl(cmd.repo, pkgName, branch), function(err) {
       if (err) {
-        console.log('Failed to install ' + pkgName + ' from branch ' + branch)
-        setImmediate(_.partial(install, branches))
+        console.log('Failed to install ' + pkgName + '@' + branch)
+        _.defer(install, branches)
       } else {
         console.log('\nInstalled ' + pkgName + '@' + branch + ' to ' + pkg.destination)
       }
