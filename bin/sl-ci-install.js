@@ -39,6 +39,7 @@ function install (branches) {
   var branch = branches.shift()
   if (!branch) {
     console.log("Failed to install " + pkgName)
+    process.exit(1)
   } else {
     pkg.install(pkgUrl(cmd.repo, pkgName, branch), function(err) {
       if (err) {
