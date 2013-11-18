@@ -43,7 +43,7 @@ function install (branches) {
   } else {
     pkg.install(pkgUrl(cmd.repo, pkgName, branch), function(err) {
       if (err) {
-        console.log(err)
+        console.log('Failed to install ' + pkgName + ' from branch ' + branch)
         setImmediate(_.partial(install, branches))
       } else {
         console.log(pkgName + " was installed to " + pkg.destination)
