@@ -1,6 +1,6 @@
 {
   "name": "sl-ci-install",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Alternate installer for npm packages that doesn't use npm",
   "main": "index.js",
   "bin": {
