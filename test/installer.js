@@ -1,5 +1,7 @@
-var assert = require('assert')
+var exec   = require('child_process').exec
+  , assert = require('assert')
   , http   = require('http')
+  , fs     = require('fs')
 
 var Installer = require('../lib/installer')
 
@@ -41,6 +43,22 @@ describe('Installer', function() {
         })
       })
       .listen(0)
+    })
+  })
+
+  describe('#fromStream', function() {
+    var installer = new Installer('test/tmp')
+    before(function(done) {
+      exec('rm -rf test/tmp', done)
+    })
+    it('extracts gzipped tar stream to destination', function (done) {
+      var tgz = fs.createReadStream('test/fixtures/sl-install-0.0.0.tgz')
+      assert(! fs.existsSync('test/tmp/package.json'))
+      installer.fromStream(tgz, function(err) {
+        assert(fs.existsSync('test/tmp/package.json'))
+        assert.ifError(err)
+        done()
+      })
     })
   })
 })
