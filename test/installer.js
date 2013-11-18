@@ -49,6 +49,24 @@ describe('Installer', function() {
       })
       .listen(0)
     })
+    it('installs a tgz from a url', function(done) {
+      var server = http.createServer()
+      .on('request', function (req, res) {
+        res.statusCode = 200
+        fs.createReadStream('test/fixtures/sl-install-0.0.0.tgz').pipe(res)
+        // res.end('Not Found')
+      })
+      .on('listening', function() {
+        var urltgz = 'http://localhost:' + server.address().port + '/something'
+        assert(! fs.existsSync('test/tmp/package.json'))
+        installer.install(urltgz, function(err) {
+          assert(!err)
+          assert(fs.existsSync('test/tmp/package.json'))
+          server.close(done)
+        })
+      })
+      .listen(0)
+    })
   })
 
   describe('#fromStream', function() {
