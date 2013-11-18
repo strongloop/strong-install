@@ -17,4 +17,20 @@ describe('Installer', function() {
       assert(installer instanceof Installer)
     })
   })
+
+  describe('#install', function () {
+    var installer = new Installer('test/tmp')
+    it('fails if the url is invalid', function (done) {
+      installer.install('http://localhost:1/', function(err) {
+        assert(err instanceof Error)
+        done()
+      })
+    })
+    it('fails if the package does not exist', function (done) {
+      installer.install('http://google.com/some_404', function(err) {
+        assert(err instanceof Error)
+        done()
+      })
+    })
+  })
 })
