@@ -1,10 +1,10 @@
-sl-ci-install
+strong-install
 =============
 
-Utility for installing Node packages from Artifactory
+Utility for installing Node packages from somewhere other than npmjs.org
 
 ```bash
-git clone git@github.com:strongloop/sl-ci-install.git
-cd sl-ci-install
+git clone git@github.com:strongloop/strong-install.git
+cd strong-install
 npm link
 ```

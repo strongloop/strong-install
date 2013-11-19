@@ -13,7 +13,7 @@ var branches
   , cmd
   , pkg
 
-process.title = 'sl-ci-install'
+process.title = 'strong-install'
 
 program
   .version(require('../package.json').version)

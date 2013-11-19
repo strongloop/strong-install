@@ -1,24 +1,24 @@
 {
-  "name": "sl-ci-install",
+  "name": "strong-install",
   "version": "0.1.0",
   "description": "Alternate installer for npm packages that doesn't use npm",
   "main": "index.js",
   "bin": {
-    "sl-ci-install": "bin/sl-ci-install.js"
+    "strong-install": "bin/strong-install.js"
   },
   "scripts": {
     "test": "mocha -R spec"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/strongloop/sl-ci-install"
+    "url": "git://github.com/strongloop/strong-install"
   },
   "author": "Ryan Graham <ryan@strongloop.com>",
-  "license": "proprietary",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/strongloop/sl-ci-install/issues"
+    "url": "https://github.com/strongloop/strong-install/issues"
   },
-  "homepage": "https://github.com/strongloop/sl-ci-install",
+  "homepage": "https://github.com/strongloop/strong-install",
   "devDependencies": {
     "mocha": "~1.14.0"
   },
