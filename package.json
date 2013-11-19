@@ -4,7 +4,7 @@
   "description": "Alternate installer for npm packages that doesn't use npm",
   "main": "index.js",
   "bin": {
-    "strong-install": "bin/strong-install.js"
+    "sl-install": "bin/sl-install.js"
   },
   "scripts": {
     "test": "mocha -R spec"
