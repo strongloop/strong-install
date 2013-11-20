@@ -27,10 +27,5 @@
     "lodash": "~2.3.0",
     "commander": "~2.0.0",
     "async": "~0.2.9"
-  },
-  "bundledDependencies": [
-    "tar",
-    "lodash",
-    "commander"
-  ]
+  }
 }
