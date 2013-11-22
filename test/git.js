@@ -51,7 +51,7 @@ describe('git', function() {
             , commits = ['abcdef1234567890', 'bcdef1234567890a', 'def1234567890abc']
             , expected = ['origin/feature/foo', 'origin/master']
           git.git.gitShowRef = function(callback) { callback(null, refs) }
-          git.git.currentCommit = function() { return commits[0] }
+          git.git.currentCommit = function() { return 'HEAD' }
           git.git.currentBranch = function() { return 'HEAD' }
           git.git.gitRevList = function(head, callback) { callback(null, [commits]) }
           git.branchList(function(err, branches) {
@@ -74,7 +74,7 @@ describe('git', function() {
             , commits = ['def1234567890abc', 'bcdef1234567890a']
             , expected = ['origin/feature/foo', 'origin/master']
           git.git.gitShowRef = function(callback) { callback(null, refs) }
-          git.git.currentCommit = function() { return commits[0] }
+          git.git.currentCommit = function() { return 'HEAD' }
           git.git.currentBranch = function() { return 'origin/feature/foo' }
           git.git.gitRevList = function(head, callback) { callback(null, [commits]) }
           git.branchList(function(err, branches) {
@@ -95,7 +95,7 @@ describe('git', function() {
             , commits = ['def1234567890abc', 'f01234567890abcde']
             , expected = ['origin/feature/foo', 'origin/master']
           git.git.gitShowRef = function(callback) { callback(null, refs) }
-          git.git.currentCommit = function() { return commits[0] }
+          git.git.currentCommit = function() { return 'HEAD' }
           git.git.currentBranch = function() { return 'origin/feature/foo' }
           git.git.gitRevList = function(head, callback) { callback(null, [commits]) }
           git.branchList(function(err, branches) {
