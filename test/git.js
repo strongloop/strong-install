@@ -46,13 +46,13 @@ describe('git', function() {
                     , 'def1234567890abc refs/remotes/origin/feature/foo'
                     , 'ef1234567890abcd refs/remotes/origin/release/1.0.0'
                     ].join('\n')
-          , expected = ['origin/master', 'origin/feature/foo', 'origin/release/1.0.0']
+          , expected = ['origin/master']
         git.getRefs = function(callback) { callback(null, refs, '') }
         git.getCommit = function() { return commit }
         git.getBranch = function() { return 'origin/feature/foo' }
         git.commitAndParents = function(head, callback) { callback(null, [commit].concat(parents)) }
         git.branchList(function(err, branches) {
-          assert.equal(branches, expected)
+          assert.deepEqual(branches, expected)
           done()
         })
       })
