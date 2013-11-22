@@ -53,7 +53,7 @@ describe('git', function() {
           git.git.gitShowRef = function(callback) { callback(null, refs) }
           git.git.currentCommit = function() { return commits[0] }
           git.git.currentBranch = function() { return 'HEAD' }
-          git.git.gitRevList = function(head, callback) { callback(null, commits) }
+          git.git.gitRevList = function(head, callback) { callback(null, [commits]) }
           git.branchList(function(err, branches) {
             assert.deepEqual(branches, expected)
             done()
@@ -63,9 +63,7 @@ describe('git', function() {
 
       describe('when HEAD is not a merge', function() {
         it('gives parent branch of single commit branch', function(done) {
-          var commit = 'def1234567890abc'
-            , parents = ['bcdef1234567890a']
-            , refs =
+          var refs =
                   [ 'abcdef1234567890 refs/heads/master'
                   , 'bcdef1234567890a refs/remotes/origin/HEAD'
                   , 'bcdef1234567890a refs/remotes/origin/master'
@@ -73,11 +71,12 @@ describe('git', function() {
                   , 'def1234567890abc refs/remotes/origin/feature/foo'
                   , 'ef1234567890abcd refs/remotes/origin/release/1.0.0'
                   ]
+            , commits = ['def1234567890abc', 'bcdef1234567890a']
             , expected = ['origin/feature/foo', 'origin/master']
           git.git.gitShowRef = function(callback) { callback(null, refs) }
-          git.git.currentCommit = function() { return commit }
+          git.git.currentCommit = function() { return commits[0] }
           git.git.currentBranch = function() { return 'origin/feature/foo' }
-          git.git.gitRevList = function(head, callback) { callback(null, [commit].concat(parents)) }
+          git.git.gitRevList = function(head, callback) { callback(null, [commits]) }
           git.branchList(function(err, branches) {
             assert.deepEqual(branches, expected)
             done()
@@ -85,9 +84,7 @@ describe('git', function() {
         })
 
         it('gives parent branch of multiple commit branch', function(done) {
-          var commit = 'def1234567890abc'
-            , parents = ['f01234567890abcde']
-            , refs =
+          var refs =
                   [ 'abcdef1234567890 refs/heads/master'
                   , 'bcdef1234567890a refs/remotes/origin/HEAD'
                   , 'bcdef1234567890a refs/remotes/origin/master'
@@ -95,11 +92,12 @@ describe('git', function() {
                   , 'def1234567890abc refs/remotes/origin/feature/foo'
                   , 'ef1234567890abcd refs/remotes/origin/release/1.0.0'
                   ]
+            , commits = ['def1234567890abc', 'f01234567890abcde']
             , expected = ['origin/feature/foo', 'origin/master']
           git.git.gitShowRef = function(callback) { callback(null, refs) }
-          git.git.currentCommit = function() { return commit }
+          git.git.currentCommit = function() { return commits[0] }
           git.git.currentBranch = function() { return 'origin/feature/foo' }
-          git.git.gitRevList = function(head, callback) { callback(null, [commit].concat(parents)) }
+          git.git.gitRevList = function(head, callback) { callback(null, [commits]) }
           git.branchList(function(err, branches) {
             assert.deepEqual(branches, expected)
             done()
