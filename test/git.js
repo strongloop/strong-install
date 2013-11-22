@@ -30,7 +30,10 @@ describe('git', function() {
 
   describe('when mocked', function() {
     var originalGit = _.extend({}, git.git)
-    after(function() {
+    beforeEach(function() {
+      git.clearCache()
+    })
+    afterEach(function() {
       _.extend(git.git, originalGit)
     })
     describe('branchList', function() {
