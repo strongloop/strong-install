@@ -29,28 +29,27 @@ describe('git', function() {
   })
 
   describe('when mocked', function() {
-    var getRefs = git.getRefs
-      , commitAndParents = git.commitAndParents
+    var originalGit = _.extend({}, git.git)
     after(function() {
-      git.getRefs = getRefs
-      git.commitAndParents = commitAndParents
+      _.extend(git.git, originalGit)
     })
-
     describe('branchList', function() {
       it('gives branches related to a commit', function(done) {
         var commit = 'abcdef1234567890'
-          , parents = 'bcdef1234567890a cdef1234567890ab def1234567890abc ef1234567890abcd'
-          , refs =  [ 'abcdef1234567890 refs/heads/master'
-                    , 'bcdef1234567890a refs/remotes/origin/HEAD'
-                    , 'cdef1234567890ab refs/remotes/origin/master'
-                    , 'def1234567890abc refs/remotes/origin/feature/foo'
-                    , 'ef1234567890abcd refs/remotes/origin/release/1.0.0'
-                    ].join('\n')
+          , parents = 'cdef1234567890ab def1234567890abc ef1234567890abcd'
+          , refs =
+                [ 'abcdef1234567890 refs/heads/master'
+                , 'bcdef1234567890a refs/remotes/origin/HEAD'
+                , 'bcdef1234567890a refs/remotes/origin/master'
+                , 'cdef1234567890ab refs/remotes/origin/master'
+                , 'def1234567890abc refs/remotes/origin/feature/foo'
+                , 'ef1234567890abcd refs/remotes/origin/release/1.0.0'
+                ].join('\n')
           , expected = ['origin/master']
-        git.getRefs = function(callback) { callback(null, refs, '') }
-        git.getCommit = function() { return commit }
-        git.getBranch = function() { return 'origin/feature/foo' }
-        git.commitAndParents = function(head, callback) { callback(null, [commit].concat(parents)) }
+        git.git.getRefs = function(callback) { callback(null, refs, '') }
+        git.git.getCommit = function() { return commit }
+        git.git.getBranch = function() { return 'origin/feature/foo' }
+        git.git.commitAndParents = function(head, callback) { callback(null, [commit].concat(parents)) }
         git.branchList(function(err, branches) {
           assert.deepEqual(branches, expected)
           done()
