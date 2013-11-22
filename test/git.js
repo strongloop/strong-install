@@ -36,9 +36,7 @@ describe('git', function() {
     describe('branchList', function() {
       describe('when HEAD is a merge commit', function() {
         it('gives merged branches', function(done) {
-          var commit = 'abcdef1234567890'
-            , parents = ['bcdef1234567890a', 'def1234567890abc']
-            , refs =
+          var refs =
                   [ 'abcdef1234567890 refs/heads/master'
                   , 'bcdef1234567890a refs/remotes/origin/HEAD'
                   , 'bcdef1234567890a refs/remotes/origin/master'
@@ -46,11 +44,13 @@ describe('git', function() {
                   , 'def1234567890abc refs/remotes/origin/feature/foo'
                   , 'ef1234567890abcd refs/remotes/origin/release/1.0.0'
                   ]
+              // HEAD is a merge of origin/feature/foo into origin/master
+            , commits = ['abcdef1234567890', 'bcdef1234567890a', 'def1234567890abc']
             , expected = ['origin/feature/foo', 'origin/master']
           git.git.gitShowRef = function(callback) { callback(null, refs) }
-          git.git.currentCommit = function() { return commit }
+          git.git.currentCommit = function() { return commits[0] }
           git.git.currentBranch = function() { return 'HEAD' }
-          git.git.gitRevList = function(head, callback) { callback(null, [commit].concat(parents)) }
+          git.git.gitRevList = function(head, callback) { callback(null, commits) }
           git.branchList(function(err, branches) {
             assert.deepEqual(branches, expected)
             done()
