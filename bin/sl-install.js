@@ -17,6 +17,9 @@ program
   .option('-q, --quiet',
           'Suppress unimportant output',
           false)
+  .option('-R, --recursive',
+          'Recursively install dependencies',
+          false)
 
 program
   .command('install [package] [branches...]')
