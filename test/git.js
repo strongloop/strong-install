@@ -78,7 +78,7 @@ describe('git', function() {
                     }
         branchMap = { 'abcd': ['remotes/origin/master']
                     , 'efgh': ['remotes/origin/production']
-                    , '1234': ['remotes/origin/feature/foo']
+                    , '1234': ['remotes/origin/feature/foo', 'remotes/origin/pr/1/head', 'remotes/origin/pr/1/merge']
                     }
         git.branchList('HEAD', function(err, branches) {
           assert.deepEqual(branches, expected)
