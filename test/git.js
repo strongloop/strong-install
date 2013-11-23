@@ -56,81 +56,78 @@ describe('git', function() {
       }
       git.clearCache()
     })
+
     afterEach(function() {
       _.extend(git.git, originalGit)
     })
+
     describe('branchList', function() {
-      describe('when HEAD is a merge commit', function() {
-        it('gives merged branches', function(done) {
-          // 'abcd' - HEAD, origin/master + merged origin/production + origin/feature/foo
-          // 'efgh' - origin/production
-          // '1234' - origin/feature/foo
-          // '5678' -
-          // '0000'
-          var expected = ['origin/feature/foo', 'origin/production', 'origin/master']
-          parents = {'HEAD': ['abcd', 'efgh', '1234', '5678']}
-          children =  { 'abcd': [['abcd', 'bbbbb']]
-                      , 'efgh': [['efgh', 'abcd', ]]
-                      , '1234': [['1234', 'efgh']]
-                      , '5678': [['5678', '1234']]
-                      }
-          branchMap = { 'abcd': ['remotes/origin/master']
-                      , 'efgh': ['remotes/origin/production']
-                      , '1234': ['remotes/origin/feature/foo']
-                      }
-          git.branchList('HEAD', function(err, branches) {
-            assert.deepEqual(branches, expected)
-            done()
-          })
+
+      it('handles merge commits', function(done) {
+        // 'abcd' - HEAD, origin/master + merged origin/production + origin/feature/foo
+        // 'efgh' - origin/production
+        // '1234' - origin/feature/foo
+        // '5678' -
+        // '0000'
+        var expected = ['origin/feature/foo', 'origin/production', 'origin/master']
+        parents = {'HEAD': ['abcd', 'efgh', '1234', '5678']}
+        children =  { 'abcd': [['abcd']]
+                    , 'efgh': [['efgh']]
+                    , '1234': [['1234']]
+                    , '5678': [['5678']]
+                    }
+        branchMap = { 'abcd': ['remotes/origin/master']
+                    , 'efgh': ['remotes/origin/production']
+                    , '1234': ['remotes/origin/feature/foo']
+                    }
+        git.branchList('HEAD', function(err, branches) {
+          assert.deepEqual(branches, expected)
+          done()
         })
       })
+    })
 
-      describe('when HEAD is not a merge', function() {
-        it('gives parent branch of single commit branch', function(done) {
-          // '1234' - HEAD, origin/feature/foo
-          // 'efgh' - origin/production
-          // 'abcd' - origin/master
-          // '0000'
-          var expected = ['origin/feature/foo', 'origin/production', 'origin/master']
-          parents = {'HEAD': ['1234', 'efgh']}
-          children =  { 'abcd': [['abcd'], ['0000', 'abcd']]
-                      , 'efgh': [['efgh'], ['abcd', '1234'], ['0000', 'abcd']]
-                      , '1234': [['1234'], ['efgh', '1234'], ['abcd', '1234'], ['0000', 'abcd']]
-                      // , '5678': [['5678', '1234']]
-                      }
-          branchMap = { 'abcd': ['remotes/origin/master', 'remotes/origin/production', 'remotes/origin/feature/foo']
-                      , 'efgh': ['remotes/origin/production', 'remotes/origin/feature/foo']
-                      , '1234': ['remotes/origin/feature/foo']
-                      }
-          git.branchList('HEAD', function(err, branches) {
-            assert.deepEqual(branches, expected)
-            done()
-          })
-        })
+    it('handles non-merge commits', function(done) {
+      // '1234' - HEAD, origin/feature/foo
+      // 'efgh' - origin/production
+      // 'abcd' - origin/master
+      // '0000'
+      var expected = ['origin/feature/foo', 'origin/production', 'origin/master']
+      parents = {'HEAD': ['1234', 'efgh']}
+      children =  { 'abcd': [['abcd'], ['0000', 'abcd']]
+                  , 'efgh': [['efgh'], ['abcd', '1234'], ['0000', 'abcd']]
+                  , '1234': [['1234'], ['efgh', '1234'], ['abcd', '1234'], ['0000', 'abcd']]
+                  }
+      branchMap = { 'abcd': ['remotes/origin/master', 'remotes/origin/production', 'remotes/origin/feature/foo']
+                  , 'efgh': ['remotes/origin/production', 'remotes/origin/feature/foo']
+                  , '1234': ['remotes/origin/feature/foo']
+                  }
+      git.branchList('HEAD', function(err, branches) {
+        assert.deepEqual(branches, expected)
+        done()
+      })
+    })
 
-        it('gives parent branch of multiple commit branch', function(done) {
-          // '1234' - HEAD, origin/feature/foo
-          // 'aaaa'
-          // 'bbbb'
-          // 'efgh' - origin/production
-          // 'abcd' - origin/master
-          // '0000'
-          var expected = ['origin/feature/foo', 'origin/production', 'origin/master']
-          parents = {'HEAD': ['1234', 'efgh']}
-          children =  { 'abcd': [['abcd'], ['0000', 'abcd']]
-                      , 'efgh': [['efgh'], ['abcd', '1234'], ['0000', 'abcd']]
-                      , '1234': [['1234'], ['aaaa', '1234'], ['bbbb', 'aaaa'], ['efgh', '1234'], ['abcd', '1234'], ['0000', 'abcd']]
-                      // , '5678': [['5678', '1234']]
-                      }
-          branchMap = { 'abcd': ['remotes/origin/master', 'remotes/origin/production', 'remotes/origin/feature/foo']
-                      , 'efgh': ['remotes/origin/production', 'remotes/origin/feature/foo']
-                      , '1234': ['remotes/origin/feature/foo']
-                      }
-          git.branchList('HEAD', function(err, branches) {
-            assert.deepEqual(branches, expected)
-            done()
-          })
-        })
+    it('handles branches with multiple commits', function(done) {
+      // '1234' - HEAD, origin/feature/foo
+      // 'aaaa'
+      // 'bbbb'
+      // 'efgh' - origin/production
+      // 'abcd' - origin/master
+      // '0000'
+      var expected = ['origin/feature/foo', 'origin/production', 'origin/master']
+      parents = {'HEAD': ['1234', 'efgh']}
+      children =  { 'abcd': [['abcd'], ['0000', 'abcd']]
+                  , 'efgh': [['efgh'], ['abcd', '1234'], ['0000', 'abcd']]
+                  , '1234': [['1234'], ['aaaa', '1234'], ['bbbb', 'aaaa'], ['efgh', '1234'], ['abcd', '1234'], ['0000', 'abcd']]
+                  }
+      branchMap = { 'abcd': ['remotes/origin/master', 'remotes/origin/production', 'remotes/origin/feature/foo']
+                  , 'efgh': ['remotes/origin/production', 'remotes/origin/feature/foo']
+                  , '1234': ['remotes/origin/feature/foo']
+                  }
+      git.branchList('HEAD', function(err, branches) {
+        assert.deepEqual(branches, expected)
+        done()
       })
     })
   })
