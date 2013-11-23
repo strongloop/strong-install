@@ -7,7 +7,7 @@
     "sl-install": "bin/sl-install.js"
   },
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "istanbul test -- _mocha -R spec"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/strongloop/strong-install",
   "devDependencies": {
-    "mocha": "~1.14.0"
+    "mocha": "~1.14.0",
+    "istanbul": "~0.1.45"
   },
   "dependencies": {
     "tar": "~0.1.18",
