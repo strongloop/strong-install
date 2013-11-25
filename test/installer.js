@@ -16,12 +16,8 @@ describe('Installer', function() {
       var installer = new Installer('foo')
       assert(installer.destination == 'foo')
     })
-    it('behaves like a constructor if called with new', function () {
+    it('is a constructor', function () {
       var installer = new Installer()
-      assert(installer instanceof Installer)
-    })
-    it('behaves like a factory if called without new', function () {
-      var installer = Installer()
       assert(installer instanceof Installer)
     })
   })
