@@ -7,26 +7,6 @@ var exec   = require('child_process').exec
 var git = require('../lib/git')
 
 describe('git', function() {
-  describe('branchList', function() {
-    it('returns an array', function(done) {
-      git.branchList(function(err, list) {
-        assert(Array.isArray(list), err)
-        done()
-      })
-    })
-    it('succeeds', function(done) {
-      git.branchList(function(err, list) {
-        assert(!err, err)
-        done()
-      })
-    })
-    it('does not contain HEAD', function(done) {
-      git.branchList(function(err, list) {
-        assert(!_.contains(list, 'HEAD'))
-        done()
-      })
-    })
-  })
 
   describe('mocked git', function() {
     var originalGit = _.extend({}, git.git)
@@ -62,6 +42,25 @@ describe('git', function() {
     })
 
     describe('branchList', function() {
+
+      it('returns an array', function(done) {
+        git.branchList(function(err, list) {
+          assert(Array.isArray(list), err)
+          done()
+        })
+      })
+      it('succeeds', function(done) {
+        git.branchList(function(err, list) {
+          assert(!err, err)
+          done()
+        })
+      })
+      it('does not contain HEAD', function(done) {
+        git.branchList(function(err, list) {
+          assert(!_.contains(list, 'HEAD'))
+          done()
+        })
+      })
 
       it('handles merge commits', function(done) {
         // 'abcd' - HEAD, origin/master + merged origin/production + origin/feature/foo
