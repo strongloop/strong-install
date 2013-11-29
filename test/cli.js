@@ -1,6 +1,12 @@
 var assert = require('assert')
   , cli = require('../lib/cli')
 
+var logger = {
+  log: console.error,
+  error: console.error,
+  info: console.error
+}
+
 describe('sl-install', function() {
   var mock_dest
     , mock_branches
@@ -34,20 +40,24 @@ describe('sl-install', function() {
     install_called = null
   })
 
-  it('uses -d/--destination to specify where to install a module', function(done) {
-    install_called = function(installer, url) {
-      assert.equal(mock_dest, "some_dir/some_module")
-      done()
-    }
-    cli.run(["node", "some_script", "-d", "some_dir", "some_module", "some/branch"])
-  })
-  it('uses -r/--repo to specify where to install a module', function(done) {
-    install_called = function(installer, url) {
-      assert.equal(url, "some_repo/some_module/some/branch/some_module-LATEST.tgz")
-      done()
-    }
-    cli.run(["node", "some_script", "-r", "some_repo/", "some_module", "some/branch"])
-  })
+  it('uses -d/--destination to specify where to install a module',
+    function(done) {
+      install_called = function(installer, url) {
+        assert.equal(mock_dest, "DEST/MOD")
+        done()
+      }
+      cli.run(["node", "script", "-d", "DEST", "MOD", "BRANCH"],
+              process.env, logger)
+    })
+  it('uses -r/--repo to specify where to install a module',
+    function(done) {
+      install_called = function(installer, url) {
+        assert.equal(url, "some_repo/MOD/BRANCH/MOD-LATEST.tgz")
+        done()
+      }
+      cli.run(["node", "script", "-r", "some_repo/", "MOD", "BRANCH"],
+              process.env, logger)
+    })
   it('requires a package name as an argument')
   it('accepts branch names as additional arguments')
 })
