@@ -149,7 +149,7 @@ describe('sl-install', function() {
         output += msg + '\n'
       }
       mockBranches = ['aaaa', 'bbbb', 'cccc']
-      commands.branches(function() {
+      commands.branches({}, function() {
         assert.equal(output, 'aaaa\nbbbb\ncccc\n')
         done()
       })
