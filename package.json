@@ -1,13 +1,14 @@
 {
   "name": "strong-install",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Alternate installer for npm packages that doesn't use npm",
   "main": "index.js",
   "bin": {
     "sl-install": "bin/sl-install.js"
   },
   "scripts": {
-    "test": "istanbul test -- _mocha -R spec"
+    "test": "istanbul test -- _mocha -R spec",
+    "posttest": "test -z \"$npm_config_coverage\" || istanbul report"
   },
   "repository": {
     "type": "git",
