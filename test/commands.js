@@ -9,35 +9,35 @@ commands.logger = {
 }
 
 describe('sl-install', function() {
-  var mock_dest
-    , mock_branches
-    , original_Installer = commands.Installer
-    , original_branchList = commands.branchList
-    , install_called
+  var mockDestination
+    , mockBranches
+    , originalInstaller = commands.Installer
+    , originalBranchList = commands.branchList
+    , installCalled
   function MockInstaller(dest) {
-    mock_dest = dest
+    mockDestination = dest
   }
-  MockInstaller.prototype.install = function(url) {
-    install_called(this, url)
+  MockInstaller.prototype.install = function(url, cb) {
+    installCalled(this, url, cb)
   }
   MockInstaller.prototype.on = function(event) {
     //nothing...
   }
   function mockBrancList(cb) {
-    process.nextTick(function() { cb(null, mock_branches) })
+    process.nextTick(function() { cb(null, mockBranches) })
   }
   before(function() {
     commands.branchList = mockBrancList
     commands.Installer = MockInstaller
-    mock_dest = null
-    mock_branches = null
+    mockDestination = null
+    mockBranches = null
     installCalled = null
   })
   after(function() {
-    commands.branchList = original_branchList
-    commands.Installer = original_Installer
-    mock_dest = null
-    mock_branches = null
+    commands.branchList = originalBranchList
+    commands.Installer = originalInstaller
+    mockDestination = null
+    mockBranches = null
     installCalled = null
   })
 
@@ -52,7 +52,7 @@ describe('sl-install', function() {
 
     it('uses destination to prepare installer', function(done) {
       installCalled = function(installer, url) {
-        assert.equal(mock_dest, "DEST/MOD")
+        assert.equal(mockDestination, "DEST/MOD")
         done()
       }
       commands.install('MOD', ['BRANCH'],
@@ -107,7 +107,7 @@ describe('sl-install', function() {
       commands.logger.info = function(msg) {
         output += msg + '\n'
       }
-      mock_branches = ['aaaa', 'bbbb', 'cccc']
+      mockBranches = ['aaaa', 'bbbb', 'cccc']
       commands.branches(function() {
         assert.equal(output, 'aaaa\nbbbb\ncccc\n')
         done()
