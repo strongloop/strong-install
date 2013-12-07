@@ -1,3 +1,3 @@
 exports.Installer = require('./lib/installer')
-exports.cli = require('./lib/cli')
+exports.commands = require('./lib/commands')
 exports.git = require('./lib/git')
