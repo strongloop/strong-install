@@ -1,7 +1,7 @@
 var assert = require('assert')
   , commands = require('../lib/commands')
 
-var logger = {
+commands.logger = {
   log: console.error,
   error: console.error,
   info: console.error
@@ -23,7 +23,7 @@ describe('sl-install', function() {
     //nothing...
   }
   function mockBrancList(cb) {
-    process.nextTick(cb, mock_branches)
+    process.nextTick(function() { cb(null, mock_branches) })
   }
   before(function() {
     commands.branchList = mockBrancList
@@ -56,6 +56,22 @@ describe('sl-install', function() {
         done()
       }
       commands.install('MOD', ['BRANCH'], {repo: 'some_repo/', destination: 'DEST'})
+    })
+
+  })
+
+  describe('branches', function() {
+
+    it('prints a list of branches', function(done) {
+      var output = ""
+      commands.logger.info = function(msg) {
+        output += msg + '\n'
+      }
+      mock_branches = ['aaaa', 'bbbb', 'cccc']
+      commands.branches(function() {
+        assert.equal(output, 'aaaa\nbbbb\ncccc\n')
+        done()
+      })
     })
 
   })
