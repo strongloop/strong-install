@@ -1,6 +1,6 @@
 {
   "name": "strong-install",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Alternate installer for npm packages that doesn't use npm",
   "main": "index.js",
   "bin": {
