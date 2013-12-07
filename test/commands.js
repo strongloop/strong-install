@@ -1,5 +1,5 @@
 var assert = require('assert')
-  , cli = require('../lib/cli')
+  , commands = require('../lib/commands')
 
 var logger = {
   log: console.error,
@@ -10,8 +10,8 @@ var logger = {
 describe('sl-install', function() {
   var mock_dest
     , mock_branches
-    , original_Installer = cli.Installer
-    , original_branchList = cli.branchList
+    , original_Installer = commands.Installer
+    , original_branchList = commands.branchList
     , install_called
   function MockInstaller(dest) {
     mock_dest = dest
@@ -26,38 +26,37 @@ describe('sl-install', function() {
     process.nextTick(cb, mock_branches)
   }
   before(function() {
-    cli.branchList = mockBrancList
-    cli.Installer = MockInstaller
+    commands.branchList = mockBrancList
+    commands.Installer = MockInstaller
     mock_dest = null
     mock_branches = null
     install_called = null
   })
   after(function() {
-    cli.branchList = original_branchList
-    cli.Installer = original_Installer
+    commands.branchList = original_branchList
+    commands.Installer = original_Installer
     mock_dest = null
     mock_branches = null
     install_called = null
   })
 
-  it('uses -d/--destination to specify where to install a module',
-    function(done) {
+  describe('install', function() {
+
+    it('uses destination to prepare installer', function(done) {
       install_called = function(installer, url) {
         assert.equal(mock_dest, "DEST/MOD")
         done()
       }
-      cli.run(["node", "script", "-d", "DEST", "MOD", "BRANCH"],
-              process.env, logger)
+      commands.install('MOD', ['BRANCH'], {repo: 'some_repo/', destination: 'DEST'})
     })
-  it('uses -r/--repo to specify where to install a module',
-    function(done) {
+
+    it('uses repo to generate url', function(done) {
       install_called = function(installer, url) {
         assert.equal(url, "some_repo/MOD/BRANCH/MOD-LATEST.tgz")
         done()
       }
-      cli.run(["node", "script", "-r", "some_repo/", "MOD", "BRANCH"],
-              process.env, logger)
+      commands.install('MOD', ['BRANCH'], {repo: 'some_repo/', destination: 'DEST'})
     })
-  it('requires a package name as an argument')
-  it('accepts branch names as additional arguments')
+
+  })
 })
