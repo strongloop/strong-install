@@ -52,7 +52,7 @@ describe('sl-install', function() {
 
     it('uses destination to prepare installer', function(done) {
       installCalled = function(installer, url) {
-        assert.equal(mockDestination, "DEST/MOD")
+        assert.equal(mockDestination, 'DEST/MOD')
         done()
       }
       commands.install('MOD', ['BRANCH'],
@@ -61,7 +61,7 @@ describe('sl-install', function() {
 
     it('uses repo to generate url', function(done) {
       installCalled = function(installer, url) {
-        assert.equal(url, "some_repo/MOD/BRANCH/MOD-LATEST.tgz")
+        assert.equal(url, 'some_repo/MOD/BRANCH/MOD-LATEST.tgz')
         done()
       }
       commands.install('MOD', ['BRANCH'],
@@ -103,7 +103,7 @@ describe('sl-install', function() {
   describe('branches', function() {
 
     it('prints a list of branches', function(done) {
-      var output = ""
+      var output = ''
       commands.logger.info = function(msg) {
         output += msg + '\n'
       }
