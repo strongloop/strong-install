@@ -19,7 +19,8 @@ program
   .command('install [package] [branches...]')
   .description('install given package or all dependencies')
   .action(function (pkg, branches) {
-    branches = this.rawArgs.slice(4)
+    var pkgNamePos = this.rawArgs.indexOf(pkg, 2)
+    branches = this.rawArgs.slice(pkgNamePos + 1)
     commands.install(pkg, branches, this)
   })
 
