@@ -118,6 +118,27 @@ describe('sl-install', function() {
                        {repo: 'R/', destination: 'DEST'})
     })
 
+    it('uses git to determine branches if none given', function(done) {
+      var expected = [ 'R/foo/BRFOO/foo-LATEST.tgz'
+                     , 'R/foo/BRBAR/foo-LATEST.tgz']
+        , installed = []
+      installCalled = function(installer, url, cb) {
+        installed.push(url)
+        if (installed.length === 1) {
+          cb(true)
+        } else {
+          cb(null)
+        }
+        if (installed.length === expected.length) {
+          assert.equal(expected.toString(), installed.toString())
+          done()
+        }
+      }
+      mockBranches = ['BRFOO', 'BRBAR']
+      commands.install('foo', [],
+                       {repo: 'R/', destination: 'DEST'})
+    })
+
   })
 
   describe('branches', function() {
