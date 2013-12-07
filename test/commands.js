@@ -1,5 +1,6 @@
 var assert = require('assert')
   , commands = require('../lib/commands')
+  , _ = require('lodash')
 
 commands.logger = {
   log: console.error,
@@ -30,32 +31,71 @@ describe('sl-install', function() {
     commands.Installer = MockInstaller
     mock_dest = null
     mock_branches = null
-    install_called = null
+    installCalled = null
   })
   after(function() {
     commands.branchList = original_branchList
     commands.Installer = original_Installer
     mock_dest = null
     mock_branches = null
-    install_called = null
+    installCalled = null
   })
 
   describe('install', function() {
 
+    function assertInstalled(expectedNames, actualUrls) {
+      var expectedUrls = _.map(expectedNames, function(name) {
+        return 'some_repo/' + name + '/BRANCH/' + name + '-LATEST.tgz'
+      })
+      assert.equal(expectedUrls.toString(), actualUrls.toString())
+    }
+
     it('uses destination to prepare installer', function(done) {
-      install_called = function(installer, url) {
+      installCalled = function(installer, url) {
         assert.equal(mock_dest, "DEST/MOD")
         done()
       }
-      commands.install('MOD', ['BRANCH'], {repo: 'some_repo/', destination: 'DEST'})
+      commands.install('MOD', ['BRANCH'],
+                       {repo: 'some_repo/', destination: 'DEST'})
     })
 
     it('uses repo to generate url', function(done) {
-      install_called = function(installer, url) {
+      installCalled = function(installer, url) {
         assert.equal(url, "some_repo/MOD/BRANCH/MOD-LATEST.tgz")
         done()
       }
-      commands.install('MOD', ['BRANCH'], {repo: 'some_repo/', destination: 'DEST'})
+      commands.install('MOD', ['BRANCH'],
+                       {repo: 'some_repo/', destination: 'DEST'})
+    })
+
+    it('gets package list from package.json if none given', function(done) {
+      var expected = _.keys(require('../package.json').dependencies)
+        , installed = []
+      installCalled = function(installer, url, cb) {
+        installed.push(url)
+        cb(null)
+        if (installed.length === expected.length) {
+          assertInstalled(expected, installed)
+          done()
+        }
+      }
+      commands.install(null, ['BRANCH'],
+                       {repo: 'some_repo/', destination: 'DEST'})
+    })
+
+    it('gets package list from package.json if "." is given', function(done) {
+      var expected = _.keys(require('../package.json').dependencies)
+        , installed = []
+      installCalled = function(installer, url, cb) {
+        installed.push(url)
+        cb(null)
+        if (installed.length === expected.length) {
+          assertInstalled(expected, installed)
+          done()
+        }
+      }
+      commands.install('.', ['BRANCH'],
+                       {repo: 'some_repo/', destination: 'DEST'})
     })
 
   })
