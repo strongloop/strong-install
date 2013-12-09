@@ -55,7 +55,7 @@ describe('sl-install', function() {
         , opts = {repo: 'some_repo/', destination: 'DEST'}
       installCalled = function(installer, url, cb) {
         installed += 1
-        cb(null)
+        setImmediate(cb, null)
       }
       commands.install('MOD', ['BRANCH'], opts, testDesination)
       function testDesination(err) {
@@ -66,83 +66,96 @@ describe('sl-install', function() {
     })
 
     it('uses repo to generate url', function(done) {
-      installCalled = function(installer, url) {
-        assert.equal(url, 'some_repo/MOD/BRANCH/MOD-LATEST.tgz')
+      var opts = {repo: 'some_repo/', destination: 'DEST'}
+        , installedUrl = null
+
+      installCalled = function(installer, url, cb) {
+        installedUrl = url
+        setImmediate(cb, null)
+      }
+
+      commands.install('MOD', ['BRANCH'], opts, verifyUrl)
+
+      function verifyUrl() {
+        assert.equal(installedUrl, 'some_repo/MOD/BRANCH/MOD-LATEST.tgz')
         done()
       }
-      commands.install('MOD', ['BRANCH'],
-                       {repo: 'some_repo/', destination: 'DEST'})
     })
 
     it('gets package list from package.json if none given', function(done) {
       var expected = _.keys(require('../package.json').dependencies)
+        , opts = {repo: 'some_repo/', destination: 'DEST'}
         , installed = []
+
       installCalled = function(installer, url, cb) {
         installed.push(url)
-        cb(null)
-        if (installed.length === expected.length) {
-          assertInstalled(expected, installed)
-          done()
-        }
+        setImmediate(cb, null)
       }
-      commands.install(null, ['BRANCH'],
-                       {repo: 'some_repo/', destination: 'DEST'})
+
+      commands.install(null, ['BRANCH'], opts, verifyInstalled)
+
+      function verifyInstalled() {
+        assertInstalled(expected, installed)
+        done()
+      }
     })
 
     it('gets package list from package.json if "." is given', function(done) {
       var expected = _.keys(require('../package.json').dependencies)
+        , opts = {repo: 'some_repo/', destination: 'DEST'}
         , installed = []
       installCalled = function(installer, url, cb) {
         installed.push(url)
-        cb(null)
-        if (installed.length === expected.length) {
-          assertInstalled(expected, installed)
-          done()
-        }
+        setImmediate(cb, null)
       }
-      commands.install('.', ['BRANCH'],
-                       {repo: 'some_repo/', destination: 'DEST'})
+
+      commands.install('.', ['BRANCH'], opts, verifyInstalled)
+
+      function verifyInstalled() {
+        assertInstalled(expected, installed)
+        done()
+      }
     })
 
     it('uses a list of branches if given', function(done) {
       var expected = [ 'R/foo/BRFOO/foo-LATEST.tgz'
                      , 'R/foo/BRBAR/foo-LATEST.tgz']
+        , opts = {repo: 'R/', destination: 'DEST'}
         , installed = []
+
       installCalled = function(installer, url, cb) {
         installed.push(url)
-        if (installed.length === 1) {
-          cb(true)
-        } else {
-          cb(null)
-        }
-        if (installed.length === expected.length) {
-          assert.equal(expected.toString(), installed.toString())
-          done()
-        }
+        setImmediate(cb, new Error('try next branch'))
       }
-      commands.install('foo', ['BRFOO', 'BRBAR'],
-                       {repo: 'R/', destination: 'DEST'})
+
+      commands.install('foo', ['BRFOO', 'BRBAR'], opts, verifyInstalled)
+
+      function verifyInstalled() {
+        assert.equal(installed.length, expected.length)
+        assert.equal(expected.toString(), installed.toString())
+        done()
+      }
     })
 
     it('uses git to determine branches if none given', function(done) {
       var expected = [ 'R/foo/BRFOO/foo-LATEST.tgz'
                      , 'R/foo/BRBAR/foo-LATEST.tgz']
+        , opts = {repo: 'R/', destination: 'DEST'}
         , installed = []
+
+      mockBranches = ['BRFOO', 'BRBAR']
       installCalled = function(installer, url, cb) {
         installed.push(url)
-        if (installed.length === 1) {
-          cb(true)
-        } else {
-          cb(null)
-        }
-        if (installed.length === expected.length) {
-          assert.equal(expected.toString(), installed.toString())
-          done()
-        }
+        setImmediate(cb, new Error('try next branch'))
       }
-      mockBranches = ['BRFOO', 'BRBAR']
-      commands.install('foo', [],
-                       {repo: 'R/', destination: 'DEST'})
+
+      commands.install('foo', [], opts, verifyInstalled)
+
+      function verifyInstalled() {
+        assert.equal(installed.length, expected.length)
+        assert.equal(expected.toString(), installed.toString())
+        done()
+      }
     })
 
   })
