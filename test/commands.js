@@ -9,13 +9,13 @@ commands.logger = {
 }
 
 describe('sl-install', function() {
-  var mockDestination
+  var installedLocation
     , mockBranches
     , originalInstaller = commands.Installer
     , originalBranchList = commands.branchList
     , installCalled
   function MockInstaller(dest) {
-    mockDestination = dest
+    installedLocation = dest
   }
   MockInstaller.prototype.install = function(url, cb) {
     installCalled(this, url, cb)
@@ -29,14 +29,14 @@ describe('sl-install', function() {
   before(function() {
     commands.branchList = mockBrancList
     commands.Installer = MockInstaller
-    mockDestination = null
+    installedLocation = null
     mockBranches = null
     installCalled = null
   })
   after(function() {
     commands.branchList = originalBranchList
     commands.Installer = originalInstaller
-    mockDestination = null
+    installedLocation = null
     mockBranches = null
     installCalled = null
   })
@@ -51,12 +51,18 @@ describe('sl-install', function() {
     }
 
     it('uses destination to prepare installer', function(done) {
-      installCalled = function(installer, url) {
-        assert.equal(mockDestination, 'DEST/MOD')
+      var installed = 0
+        , opts = {repo: 'some_repo/', destination: 'DEST'}
+      installCalled = function(installer, url, cb) {
+        installed += 1
+        cb(null)
+      }
+      commands.install('MOD', ['BRANCH'], opts, testDesination)
+      function testDesination(err) {
+        assert.equal(installedLocation, 'DEST/MOD')
+        assert.equal(installed, 1)
         done()
       }
-      commands.install('MOD', ['BRANCH'],
-                       {repo: 'some_repo/', destination: 'DEST'})
     })
 
     it('uses repo to generate url', function(done) {
