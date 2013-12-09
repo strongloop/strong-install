@@ -158,6 +158,26 @@ describe('sl-install', function() {
       }
     })
 
+    it('stops on the first successful install', function(done) {
+      var expected = [ 'R/foo/BRFOO/foo-LATEST.tgz' ]
+        , opts = {repo: 'R/', destination: 'DEST'}
+        , installed = []
+
+      installCalled = function(installer, url, cb) {
+        installed.push(url)
+        setImmediate(cb, null) // successful install
+      }
+
+      commands.install('foo', ['BRFOO', 'BRBAR', 'BRBAZ', 'BRBUZZ', 'BRANCH'],
+                       opts, verifyInstalled)
+
+      function verifyInstalled() {
+        assert.equal(installed.length, expected.length)
+        assert.equal(expected.toString(), installed.toString())
+        done()
+      }
+    })
+
   })
 
   describe('branches', function() {
