@@ -21,7 +21,11 @@ program
   .action(function (pkg, branches) {
     var pkgNamePos = pkg ? this.rawArgs.indexOf(pkg, 2) : this.rawArgs.length
     branches = this.rawArgs.slice(pkgNamePos + 1)
-    commands.install(pkg, branches, this)
+    commands.install(pkg, branches, this, function(err) {
+      if (err) {
+        process.exit(1)
+      }
+    })
   })
 
 program
