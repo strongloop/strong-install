@@ -2,17 +2,12 @@ var assert = require('assert')
   , commands = require('../lib/commands')
   , _ = require('lodash')
 
-commands.logger = {
-  log: console.error,
-  error: console.error,
-  info: console.error
-}
-
 describe('sl-install', function() {
   var installedLocation
     , mockBranches
     , originalInstaller = commands.Installer
     , originalBranchList = commands.branchList
+    , originalInfoLogger = commands.logger.info
     , installCalled
   function MockInstaller(dest) {
     installedLocation = dest
@@ -32,13 +27,7 @@ describe('sl-install', function() {
     installedLocation = null
     mockBranches = null
     installCalled = null
-  })
-  after(function() {
-    commands.branchList = originalBranchList
-    commands.Installer = originalInstaller
-    installedLocation = null
-    mockBranches = null
-    installCalled = null
+    commands.logger.info = originalInfoLogger
   })
 
   describe('install', function() {
