@@ -9,8 +9,10 @@ describe('sl-install', function() {
     , originalBranchList = commands.branchList
     , originalInfoLogger = commands.logger.info
     , installCalled
+    , loadedJSONPath
+    , mockPackageJSON = { version: '0.0.0' }
   function MockInstaller(dest) {
-    installedLocation = dest
+    this.destination = installedLocation = dest
   }
   MockInstaller.prototype.install = function(url, cb) {
     installCalled(this, url, cb)
@@ -21,12 +23,18 @@ describe('sl-install', function() {
   function mockBrancList(cb) {
     process.nextTick(function() { cb(null, mockBranches) })
   }
+  function mockRequire(path) {
+    loadedJSONPath = path
+    return mockPackageJSON
+  }
   before(function() {
     commands.branchList = mockBrancList
     commands.Installer = MockInstaller
+    commands.JSONReader = mockRequire
     installedLocation = null
     mockBranches = null
     installCalled = null
+    loadedJSONPath = null
     commands.logger.info = originalInfoLogger
   })
 
