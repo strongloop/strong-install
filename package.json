@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "istanbul test -- _mocha -R spec",
-    "posttest": "test -z \"$npm_config_coverage\" || istanbul report"
+    "posttest": "test -z $npm_config_coverage || istanbul report"
   },
   "repository": {
     "type": "git",
