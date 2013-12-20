@@ -14,6 +14,9 @@ program
   .option('-d, --destination <dir>',
           'Set directory to install from',
           'node_modules')
+  .option('-q, --quiet',
+          'Suppress unimportant output',
+          false)
 
 program
   .command('install [package] [branches...]')
