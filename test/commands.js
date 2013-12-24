@@ -1,6 +1,9 @@
 var assert = require('assert')
   , commands = require('../lib/commands')
   , _ = require('lodash')
+  , myPackageJSON = require('../package.json')
+  , myDevDeps = _.keys(myPackageJSON.devDependencies)
+  , myDeps = _.keys(myPackageJSON.dependencies)
 
 describe('sl-install', function() {
   var installedLocation
@@ -80,7 +83,7 @@ describe('sl-install', function() {
     })
 
     it('gets package list from package.json if none given', function(done) {
-      var expected = _.keys(require('../package.json').dependencies)
+      var expected = myDeps.concat(myDevDeps)
         , opts = {repo: 'some_repo/', destination: 'DEST'}
         , installed = []
 
@@ -98,7 +101,7 @@ describe('sl-install', function() {
     })
 
     it('gets package list from package.json if "." is given', function(done) {
-      var expected = _.keys(require('../package.json').dependencies)
+      var expected = myDeps.concat(myDevDeps)
         , opts = {repo: 'some_repo/', destination: 'DEST'}
         , installed = []
       installCalled = function(installer, url, cb) {
