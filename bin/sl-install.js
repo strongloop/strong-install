@@ -32,6 +32,7 @@ program
     branches = this.rawArgs.slice(pkgNamePos + 1)
     commands.install(pkg, branches, this, function(err) {
       if (err) {
+        console.error(err)
         process.exit(1)
       }
     })
