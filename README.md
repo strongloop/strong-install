@@ -14,7 +14,7 @@ npm link
 
 ## Run
 ```
-  Usage: sl-install.js [options] [command]
+  Usage: sl-install [options] [command]
 
   Commands:
 
