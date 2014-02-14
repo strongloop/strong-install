@@ -17,12 +17,6 @@ program
   .option('-q, --quiet',
           'Suppress unimportant output',
           false)
-  .option('-R, --recursive',
-          'Recursively install dependencies',
-          false)
-  .option('-N, --npm',
-          'Use npm install as a post-install step',
-          false)
 
 program
   .command('install [package] [branches...]')
