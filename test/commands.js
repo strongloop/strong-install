@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require('assert')
   , commands = require('../lib/commands')
   , _ = require('lodash')

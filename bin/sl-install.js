@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict';
+
 var commands = require('../').commands
   , program  = require('commander')
   , self     = require('../package.json')
