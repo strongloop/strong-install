@@ -15,7 +15,7 @@
     "url": "git://github.com/strongloop/strong-install"
   },
   "author": "Ryan Graham <ryan@strongloop.com>",
-  "license": "MIT",
+  "license": "Artistic",
   "bugs": {
     "url": "https://github.com/strongloop/strong-install/issues"
   },
