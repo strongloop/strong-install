@@ -1,3 +1,9 @@
+2016-05-06, Version 0.7.5
+=========================
+
+ * update copyright notices and license (Ryan Graham)
+
+
 2016-04-11, Version 0.7.4
 =========================
 
@@ -24,6 +30,10 @@
  * src: wrap some long lines (Ryan Graham)
 
  * src: 'use strict' (Ryan Graham)
+
+
+2014-02-21, Version 0.7.2
+=========================
 
  * Use latest version of npm (Ryan Graham)
 
