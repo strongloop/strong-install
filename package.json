@@ -8,7 +8,9 @@
   },
   "scripts": {
     "test": "istanbul test -- _mocha -R spec",
-    "posttest": "test -z $npm_config_coverage || istanbul report"
+    "posttest": "test -z $npm_config_coverage || istanbul report",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,8 @@
     "lodash": "~2.3.0",
     "commander": "~2.0.0",
     "async": "~0.2.9",
-    "npm": "*"
-  }
+    "npm": "*",
+    "snyk": "^1.88.0"
+  },
+  "snyk": true
 }
